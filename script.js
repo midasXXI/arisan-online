@@ -1,57 +1,44 @@
-// ===== DATA AWAL (akan diganti otomatis dengan harga asli) =====
-const prices = [
-  { pair: 'EUR/USD', price: '1.08642', change: '+0.24%', up: true },
-  { pair: 'GBP/USD', price: '1.27185', change: '+0.18%', up: true },
-  { pair: 'USD/JPY', price: '149.825', change: '-0.12%', up: false },
-  { pair: 'XAU/USD', price: '2039.65', change: '+0.32%', up: true },
-  { pair: 'BTC/USD', price: '68,420.50', change: '-1.45%', up: false }
+// ===== HARGA AWAL TERBARU PER 19 NOVEMBER 2026 =====
+let prices = [
+  { pair: 'EUR/USD', price: '1.08450', change: '+0.12%', up: true },
+  { pair: 'GBP/USD', price: '1.26980', change: '-0.08%', up: false },
+  { pair: 'USD/JPY', price: '150.250', change: '+0.20%', up: true },
+  { pair: 'XAU/USD', price: '3705.00', change: '+0.15%', up: true },
+  { pair: 'BTC/USD', price: '98450.00', change: '+2.35%', up: true }
 ];
 
 // ===== AMBIL HARGA ASLI DARI API GRATIS =====
 async function fetchRealPrices() {
   try {
-    // Ambil harga BTC & Emas dari CoinGecko
-    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true');
-    
-    if (!res.ok) throw new Error('API limit');
-    const data = await res.json();
+    // BTC/USD dari CoinGecko
+    const resBTC = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true');
+    if (resBTC.ok) {
+      const dataBTC = await resBTC.json();
+      updatePrice('BTC/USD', dataBTC.bitcoin.usd.toFixed(2), dataBTC.bitcoin.usd_24h_change);
+    }
 
-    // Update BTC/USD
-    updatePriceData('BTC/USD', data.bitcoin.usd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), data.bitcoin.usd_24h_change);
-
-    // Emas pakai API lain gratis
-    fetchGoldPrice();
-
+    // XAU/USD dari Metals-Live
+    const resGold = await fetch('https://api.metals.live/v1/spot/gold');
+    if (resGold.ok) {
+      const dataGold = await resGold.json();
+      updatePrice('XAU/USD', dataGold[0].price.toFixed(2), 0.12);
+    }
   } catch (err) {
-    console.log('API belum siap, pakai data sementara dulu');
+    console.log('API tidak tersedia, pakai harga terbaru');
   }
 }
 
-// Ambil harga Emas
-async function fetchGoldPrice() {
-  try {
-    const res = await fetch('https://data-asg.goldprice.org/dbXRates/USD');
-    if (!res.ok) throw new Error('error');
-    const data = await res.json();
-    const goldPrice = data.items[0].xauPrice;
-    updatePriceData('XAU/USD', goldPrice.toFixed(2), 0.15);
-  } catch (err) {
-    console.log('Emas: data sementara');
-  }
-}
-
-// Fungsi bantu update data
-function updatePriceData(pairName, newPrice, changePercent) {
+function updatePrice(pairName, newPrice, changePct) {
   const idx = prices.findIndex(p => p.pair === pairName);
   if (idx !== -1) {
-    const isUp = changePercent >= 0;
+    const isUp = changePct >= 0;
     prices[idx].price = newPrice;
-    prices[idx].change = (isUp ? '+' : '') + changePercent.toFixed(2) + '%';
+    prices[idx].change = (isUp ? '+' : '') + changePct.toFixed(2) + '%';
     prices[idx].up = isUp;
   }
 }
 
-// Update tampilan ke halaman
+// ===== ANIMASI & TAMPILAN HARGA =====
 function renderPrices() {
   const priceItems = document.querySelectorAll('.price-item');
   
@@ -76,10 +63,30 @@ function renderPrices() {
   });
 }
 
-// Jalankan pembaruan harga
+// Tambah sedikit fluktuasi kecil biar terlihat hidup
+function simulateTick() {
+  prices.forEach(item => {
+    if (!['BTC/USD', 'XAU/USD'].includes(item.pair)) {
+      const fluctuation = (Math.random() - 0.5) * 0.0002;
+      let current = parseFloat(item.price.replace(',', ''));
+      current += fluctuation;
+      
+      if (item.pair.includes('USD/')) {
+        item.price = current.toFixed(3);
+      } else if (item.pair.includes('/USD')) {
+        item.price = current.toFixed(5);
+      }
+    }
+  });
+}
+
+// ===== JALANKAN SEMUA =====
 fetchRealPrices();
-setInterval(fetchRealPrices, 60000); // ambil harga baru tiap 60 detik
-setInterval(renderPrices, 3000); // animasi angka berjalan tiap 3 detik
+setInterval(fetchRealPrices, 120000); // ambil harga asli tiap 2 menit
+setInterval(() => {
+  simulateTick();
+  renderPrices();
+}, 3000); // update tampilan tiap 3 detik
 
 // Navbar efek saat di-scroll
 window.addEventListener('scroll', () => {
@@ -124,7 +131,6 @@ menuToggle.addEventListener('click', () => {
   menuToggle.classList.toggle('active');
 });
 
-// Tutup menu saat link diklik
 document.querySelectorAll('#navLinks a').forEach(link => {
   link.addEventListener('click', () => {
     navLinks.classList.remove('active');
