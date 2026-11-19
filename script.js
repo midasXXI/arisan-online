@@ -7,21 +7,21 @@ let prices = [
   { pair: 'BTC/USD', symbol: 'BTCUSD', price: '98450.00', change: '+0.00%', up: true }
 ];
 
-let lastPrices = {}; // Simpan harga sebelumnya untuk hitung persentase
+let lastPrices = {};
 
-// ===== AMBIL HARGA DARI API =====
+// ===== AMBIL HARGA =====
 async function fetchPrices() {
   let successCount = 0;
 
   for (const item of prices) {
     try {
-      const res = await fetch(`https://api.bitoasis.net/v1/ticker/${item.symbol.toLowerCase()}`);
+      const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${mapCoinId(item.pair)}&vs_currencies=usd&include_24hr_change=true`);
       if (res.ok) {
         const data = await res.json();
-        const newPrice = parseFloat(data.last);
+        const coinKey = Object.keys(data)[0];
+        const newPrice = parseFloat(data[coinKey].usd);
         
         if (!lastPrices[item.pair]) lastPrices[item.pair] = newPrice;
-        
         const changePct = ((newPrice - lastPrices[item.pair]) / lastPrices[item.pair]) * 100;
         
         item.price = newPrice.toFixed(item.pair.includes('XAU') || item.pair.includes('BTC') ? 2 : 5);
@@ -31,20 +31,23 @@ async function fetchPrices() {
         successCount++;
       }
     } catch (err) {
-      // API bermasalah → pakai simulasi kecil
       simulateSmallChange(item);
     }
   }
 
-  // Kalau API gagal semua, pakai simulasi wajar
   if (successCount === 0) {
     prices.forEach(item => simulateSmallChange(item));
   }
 
-  renderPrices();
+  renderAll();
 }
 
-// ===== SIMULASI PERUBAHAN KECIL JIKA API LAMBAT =====
+function mapCoinId(pair) {
+  if (pair === 'BTC/USD') return 'bitcoin';
+  if (pair === 'XAU/USD') return 'gold';
+  return '';
+}
+
 function simulateSmallChange(item) {
   const current = parseFloat(item.price.replace(',', ''));
   const volatility = item.pair.includes('BTC') ? 0.0005 : 0.0001;
@@ -57,10 +60,15 @@ function simulateSmallChange(item) {
   item.up = changePct >= 0;
 }
 
-// ===== TAMPILKAN HARGA =====
-function renderPrices() {
+// ===== UPDATE KEDUA TEMPAT SEKALIGUS =====
+function renderAll() {
+  renderPriceCards();
+  renderTicker();
+}
+
+// Update kotak harga di kanan
+function renderPriceCards() {
   const priceItems = document.querySelectorAll('.price-item');
-  
   prices.forEach((item, index) => {
     if (priceItems[index]) {
       const priceEl = priceItems[index].querySelector('.pair-price');
@@ -82,9 +90,23 @@ function renderPrices() {
   });
 }
 
+// Update ticker berjalan di bawah
+function renderTicker() {
+  const tickerSpans = document.querySelectorAll('.ticker span');
+  prices.forEach((item, index) => {
+    if (tickerSpans[index]) {
+      const strongEl = tickerSpans[index].querySelector('strong');
+      if (strongEl) {
+        const arrow = item.up ? '↑' : '↓';
+        strongEl.textContent = `${item.price} ${arrow}`;
+      }
+    }
+  });
+}
+
 // ===== JALANKAN =====
-fetchPrices();                  // Ambil pertama kali
-setInterval(fetchPrices, 5000); // Update tiap 5 DETIK — lebih cepat!
+fetchPrices();
+setInterval(fetchPrices, 5000); // tiap 5 detik update keduanya sekaligus
 
 // Navbar efek saat di-scroll
 window.addEventListener('scroll', () => {
