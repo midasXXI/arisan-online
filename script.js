@@ -1,4 +1,4 @@
-// Data harga simulasi — nanti bisa diganti API asli
+// ===== DATA AWAL (akan diganti otomatis dengan harga asli) =====
 const prices = [
   { pair: 'EUR/USD', price: '1.08642', change: '+0.24%', up: true },
   { pair: 'GBP/USD', price: '1.27185', change: '+0.18%', up: true },
@@ -7,39 +7,79 @@ const prices = [
   { pair: 'BTC/USD', price: '68,420.50', change: '-1.45%', up: false }
 ];
 
-// Update harga di halaman
-function updatePrices() {
+// ===== AMBIL HARGA ASLI DARI API GRATIS =====
+async function fetchRealPrices() {
+  try {
+    // Ambil harga BTC & Emas dari CoinGecko
+    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true');
+    
+    if (!res.ok) throw new Error('API limit');
+    const data = await res.json();
+
+    // Update BTC/USD
+    updatePriceData('BTC/USD', data.bitcoin.usd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), data.bitcoin.usd_24h_change);
+
+    // Emas pakai API lain gratis
+    fetchGoldPrice();
+
+  } catch (err) {
+    console.log('API belum siap, pakai data sementara dulu');
+  }
+}
+
+// Ambil harga Emas
+async function fetchGoldPrice() {
+  try {
+    const res = await fetch('https://data-asg.goldprice.org/dbXRates/USD');
+    if (!res.ok) throw new Error('error');
+    const data = await res.json();
+    const goldPrice = data.items[0].xauPrice;
+    updatePriceData('XAU/USD', goldPrice.toFixed(2), 0.15);
+  } catch (err) {
+    console.log('Emas: data sementara');
+  }
+}
+
+// Fungsi bantu update data
+function updatePriceData(pairName, newPrice, changePercent) {
+  const idx = prices.findIndex(p => p.pair === pairName);
+  if (idx !== -1) {
+    const isUp = changePercent >= 0;
+    prices[idx].price = newPrice;
+    prices[idx].change = (isUp ? '+' : '') + changePercent.toFixed(2) + '%';
+    prices[idx].up = isUp;
+  }
+}
+
+// Update tampilan ke halaman
+function renderPrices() {
   const priceItems = document.querySelectorAll('.price-item');
   
   prices.forEach((item, index) => {
     if (priceItems[index]) {
-      // Tambah sedikit perubahan acak agar terlihat hidup
-      const fluctuation = (Math.random() - 0.5) * 0.001;
-      let newPrice = parseFloat(item.price.replace(',', '')) + fluctuation;
-      if (item.pair.includes('/') && !item.pair.includes('BTC') && !item.pair.includes('XAU')) {
-        newPrice = newPrice.toFixed(5);
-      } else if (item.pair.includes('XAU')) {
-        newPrice = newPrice.toFixed(2);
-      } else if (item.pair.includes('BTC')) {
-        newPrice = newPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-      } else {
-        newPrice = newPrice.toFixed(3);
-      }
-      
       const priceEl = priceItems[index].querySelector('.pair-price');
+      const changeEl = priceItems[index].querySelector('.pair-change');
+      
       if (priceEl) {
         priceEl.style.opacity = '0.5';
         setTimeout(() => {
-          priceEl.textContent = newPrice;
+          priceEl.textContent = item.price;
           priceEl.style.opacity = '1';
         }, 150);
+      }
+      
+      if (changeEl) {
+        changeEl.textContent = item.change;
+        changeEl.className = `pair-change ${item.up ? 'change-up' : 'change-down'}`;
       }
     }
   });
 }
 
-// Jalankan pembaruan harga setiap 3 detik
-setInterval(updatePrices, 3000);
+// Jalankan pembaruan harga
+fetchRealPrices();
+setInterval(fetchRealPrices, 60000); // ambil harga baru tiap 60 detik
+setInterval(renderPrices, 3000); // animasi angka berjalan tiap 3 detik
 
 // Navbar efek saat di-scroll
 window.addEventListener('scroll', () => {
