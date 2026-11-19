@@ -1,112 +1,97 @@
-// ===== HARGA AWAL =====
+// ===== DATA HARGA UTAMA =====
 let prices = [
-  { pair: 'EUR/USD', symbol: 'EURUSD', price: '1.08450', change: '+0.00%', up: true },
-  { pair: 'GBP/USD', symbol: 'GBPUSD', price: '1.26980', change: '+0.00%', up: true },
-  { pair: 'USD/JPY', symbol: 'USDJPY', price: '150.250', change: '+0.00%', up: true },
-  { pair: 'XAU/USD', symbol: 'XAUUSD', price: '3705.00', change: '+0.00%', up: true },
-  { pair: 'BTC/USD', symbol: 'BTCUSD', price: '98450.00', change: '+0.00%', up: true }
+  { pair: 'EUR/USD', price: '1.08450', change: '+0.00%', up: true },
+  { pair: 'GBP/USD', price: '1.26980', change: '+0.00%', up: true },
+  { pair: 'USD/JPY', price: '150.250', change: '+0.00%', up: true },
+  { pair: 'XAU/USD', price: '3705.00', change: '+0.00%', up: true },
+  { pair: 'BTC/USD', price: '98450.00', change: '+0.00%', up: true }
 ];
 
-let lastPrices = {};
+// ===== FUNGSI: HARGA BERUBAH SENDIRI =====
+function updatePricesEverySecond() {
+  prices.forEach(item => {
+    const current = parseFloat(item.price.replace(/,/g, ''));
+    
+    // Ukuran perubahan sesuai jenis pasangan
+    let step;
+    if (item.pair === 'BTC/USD') step = (Math.random() - 0.5) * 8;
+    else if (item.pair === 'XAU/USD') step = (Math.random() - 0.5) * 1.5;
+    else if (item.pair === 'USD/JPY') step = (Math.random() - 0.5) * 0.015;
+    else step = (Math.random() - 0.5) * 0.00015;
 
-// ===== AMBIL HARGA =====
-async function fetchPrices() {
-  let successCount = 0;
-
-  for (const item of prices) {
-    try {
-      const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${mapCoinId(item.pair)}&vs_currencies=usd&include_24hr_change=true`);
-      if (res.ok) {
-        const data = await res.json();
-        const coinKey = Object.keys(data)[0];
-        const newPrice = parseFloat(data[coinKey].usd);
-        
-        if (!lastPrices[item.pair]) lastPrices[item.pair] = newPrice;
-        const changePct = ((newPrice - lastPrices[item.pair]) / lastPrices[item.pair]) * 100;
-        
-        item.price = newPrice.toFixed(item.pair.includes('XAU') || item.pair.includes('BTC') ? 2 : 5);
-        item.change = (changePct >= 0 ? '+' : '') + changePct.toFixed(3) + '%';
-        item.up = changePct >= 0;
-        lastPrices[item.pair] = newPrice;
-        successCount++;
-      }
-    } catch (err) {
-      simulateSmallChange(item);
+    const newPrice = current + step;
+    const isUp = step >= 0;
+    
+    // Format angka
+    if (item.pair === 'BTC/USD') {
+      item.price = newPrice.toFixed(2);
+    } else if (item.pair === 'XAU/USD') {
+      item.price = newPrice.toFixed(2);
+    } else if (item.pair === 'USD/JPY') {
+      item.price = newPrice.toFixed(3);
+    } else {
+      item.price = newPrice.toFixed(5);
     }
-  }
+    
+    item.up = isUp;
+    item.change = (isUp ? '+' : '') + (step / current * 100).toFixed(4) + '%';
+  });
 
-  if (successCount === 0) {
-    prices.forEach(item => simulateSmallChange(item));
-  }
-
+  // Langsung tampilkan ke SEMUA tempat
   renderAll();
 }
 
-function mapCoinId(pair) {
-  if (pair === 'BTC/USD') return 'bitcoin';
-  if (pair === 'XAU/USD') return 'gold';
-  return '';
-}
-
-function simulateSmallChange(item) {
-  const current = parseFloat(item.price.replace(',', ''));
-  const volatility = item.pair.includes('BTC') ? 0.0005 : 0.0001;
-  const change = (Math.random() - 0.5) * 2 * volatility;
-  const newPrice = current + change;
-  const changePct = (change / current) * 100;
-  
-  item.price = newPrice.toFixed(item.pair.includes('XAU') || item.pair.includes('BTC') ? 2 : 5);
-  item.change = (changePct >= 0 ? '+' : '') + changePct.toFixed(3) + '%';
-  item.up = changePct >= 0;
-}
-
-// ===== UPDATE KEDUA TEMPAT SEKALIGUS =====
+// ===== TAMPILKAN KE KEDUA TEMPAT SEKALIGUS =====
 function renderAll() {
-  renderPriceCards();
+  renderPriceBox();
   renderTicker();
 }
 
-// Update kotak harga di kanan
-function renderPriceCards() {
+// 1️⃣ Update kotak harga di kanan
+function renderPriceBox() {
   const priceItems = document.querySelectorAll('.price-item');
-  prices.forEach((item, index) => {
-    if (priceItems[index]) {
-      const priceEl = priceItems[index].querySelector('.pair-price');
-      const changeEl = priceItems[index].querySelector('.pair-change');
-      
-      if (priceEl) {
-        priceEl.style.opacity = '0.5';
-        setTimeout(() => {
-          priceEl.textContent = item.price;
-          priceEl.style.opacity = '1';
-        }, 100);
-      }
-      
-      if (changeEl) {
-        changeEl.textContent = item.change;
-        changeEl.className = `pair-change ${item.up ? 'change-up' : 'change-down'}`;
-      }
+  prices.forEach((item, i) => {
+    if (!priceItems[i]) return;
+    
+    const priceEl = priceItems[i].querySelector('.pair-price');
+    const changeEl = priceItems[i].querySelector('.pair-change');
+    
+    if (priceEl) priceEl.textContent = item.price;
+    if (changeEl) {
+      changeEl.textContent = item.change;
+      changeEl.className = `pair-change ${item.up ? 'change-up' : 'change-down'}`;
     }
   });
 }
 
-// Update ticker berjalan di bawah
+// 2️⃣ Update ticker berjalan di bawah
 function renderTicker() {
-  const tickerSpans = document.querySelectorAll('.ticker span');
-  prices.forEach((item, index) => {
-    if (tickerSpans[index]) {
-      const strongEl = tickerSpans[index].querySelector('strong');
-      if (strongEl) {
-        const arrow = item.up ? '↑' : '↓';
-        strongEl.textContent = `${item.price} ${arrow}`;
-      }
+  const tickerItems = document.querySelectorAll('.ticker span');
+  prices.forEach((item, i) => {
+    if (!tickerItems[i]) return;
+    const strong = tickerItems[i].querySelector('strong');
+    if (strong) {
+      const arrow = item.up ? '↑' : '↓';
+      strong.textContent = item.price + ' ' + arrow;
     }
   });
+  
+  // Bagian duplikat ticker (supaya mulus saat berjalan)
+  const allSpans = document.querySelectorAll('.ticker span');
+  const totalPairs = prices.length;
+  for (let j = totalPairs; j < allSpans.length; j++) {
+    const idx = j % totalPairs;
+    const strong = allSpans[j].querySelector('strong');
+    if (strong) {
+      const arrow = prices[idx].up ? '↑' : '↓';
+      strong.textContent = prices[idx].price + ' ' + arrow;
+    }
+  }
 }
 
-// ===== JALANKAN =====
-fetchPrices();
-setInterval(fetchPrices, 5000); // tiap 5 detik update keduanya sekaligus
+// ===== MULAI JALANKAN =====
+updatePricesEverySecond(); // Jalankan pertama kali
+setInterval(updatePricesEverySecond, 1000); // 🔁 UBAH SETIAP 1 DETIK
 
 // Navbar efek saat di-scroll
 window.addEventListener('scroll', () => {
@@ -121,11 +106,7 @@ window.addEventListener('scroll', () => {
 });
 
 // Animasi masuk elemen saat terlihat
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: '0px 0px -50px 0px'
-};
-
+const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
