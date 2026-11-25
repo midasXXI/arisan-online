@@ -1,254 +1,130 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exness Mitra — Trading Global, Bersama Anda</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exness IB — Trading Emas & Forex Terpercaya</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="bg-animation"></div>
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">Exness IB</div>
+        <div class="nav-links" id="navLinks">
+            <a href="#home">Beranda</a>
+            <a href="#harga">Harga Pasar</a>
+            <a href="#keuntungan">Keuntungan</a>
+            <a href="#daftar" class="btn-primary">Daftar Akun</a>
+        </div>
+        <div class="menu-toggle" id="menuToggle">☰</div>
+    </nav>
 
-<!-- Navbar -->
-<nav class="navbar">
-  <div class="container">
-    <div class="logo">EXNESS MITRA</div>
-    
-    <!-- Tombol Menu HP -->
-    <div class="menu-toggle" id="menuToggle">
-      <span></span>
-      <span></span>
-      <span></span>
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <h1>Selamat Datang di <span>Exness Partner</span></h1>
+        <p>Platform perdagangan terpercaya dengan spread rendah, eksekusi cepat, dan penarikan dana instan 24/7. Mulai trading Emas, Forex, Kripto, dan lainnya sekarang.</p>
+        <a href="#daftar" class="btn-large">Buka Akun Gratis</a>
+    </section>
+
+    <!-- TICKER HARGA -->
+    <div class="ticker-wrapper">
+        <div class="ticker" id="ticker"></div>
     </div>
 
-    <ul class="nav-links" id="navLinks">
-      <li><a href="index.html" class="active">Beranda</a></li>
-      <li><a href="tentang.html">Tentang</a></li>
-      <li><a href="keuntungan.html">Keuntungan</a></li>
-      <li><a href="caradaftar.html">Cara Daftar</a></li>
-      <li><a href="kontak.html">Kontak</a></li>
-      <li><a href="https://www.exness.com/signup/?ref=GANTI-REF-KAMU" target="_blank" class="btn-nav">Daftar</a></li>
-    </ul>
-  </div>
-</nav>
+    <!-- HARGA PASAR -->
+    <section class="prices-section" id="harga">
+        <h2 class="section-title">📊 Harga Pasar Langsung</h2>
+        <div class="prices-grid" id="pricesGrid"></div>
+    </section>
 
+    <!-- SESI PASAR -->
+    <section class="sessions">
+        <h2 class="section-title">🕐 Sesi Perdagangan (WIB)</h2>
+        <div class="sessions-grid">
+            <div class="session-card">
+                <h4>🌏 Asia</h4>
+                <p>04.00 — 12.00</p>
+            </div>
+            <div class="session-card">
+                <h4>🌍 Eropa</h4>
+                <p>13.00 — 21.00</p>
+            </div>
+            <div class="session-card">
+                <h4>🇺🇸 Amerika</h4>
+                <p>19.30 — 04.00</p>
+            </div>
+        </div>
+    </section>
 
-<!-- Hero Section -->
-<section class="hero">
-  <div class="container">
-    <div class="hero-content">
-      <h1>Trading di Pasar Global <br><span>Bersama Mitra Resmi Exness</span></h1>
-      <p>Akses pasar keuangan dunia dengan kondisi trading yang kompetitif. Pendaftaran cepat, penarikan dana mudah, dan dukungan penuh siap membimbing langkah Anda.</p>
-      <div class="hero-buttons">
-        <a href="https://www.exness.com/signup/?ref=GANTI-REF-KAMU" target="_blank" class="btn-primary">🚀 Buka Akun Sekarang</a>
-        <a href="caradaftar.html" class="btn-secondary">Pelajari Cara Daftar</a>
-      </div>
+    <!-- KEUNGGULAN -->
+    <section class="features" id="keuntungan">
+        <h2 class="section-title">✨ Keuntungan Trading Bersama Kami</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Spread Rendah</h3>
+                <p>Mulai dari 0.0 pips. Biaya trading lebih hemat, potensi untung lebih besar.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Eksekusi Cepat</h3>
+                <p>Order dalam milidetik. Tanpa requote, tanpa penundaan.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏦</div>
+                <h3>Penarikan Instan</h3>
+                <p>Deposit & tarik dana 24 jam. Cepat sampai kapan pun.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Aman & Teregulasi</h3>
+                <p>Berlisensi resmi. Dana klien dipisahkan di bank tingkat atas.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>200+ Instrumen</h3>
+                <p>Emas, Forex, Saham, Kripto, Energi — semua tersedia.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Semua Platform</h3>
+                <p>MT4, MT5, Web Terminal. Bisa di HP & komputer.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- DAFTAR CTA -->
+    <section class="cta" id="daftar">
+        <h2>Siap Memulai Trading?</h2>
+        <p>Daftar sekarang, buka akun riil, dan mulai meraih peluang pasar bersama Exness.</p>
+        <a href="https://www.exness.com/register" target="_blank" class="btn-large">👉 Daftar Akun Exness</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>⚠️ Trading melibatkan risiko kerugian. Bukan untuk semua orang. Pastikan paham risikonya.</p>
+        <p>&copy; 2026 Exness Partner. Semua Hak Dilindungi.</p>
+    </footer>
+
+    <!-- LIVE CHAT BUTTON -->
+    <div class="chat-btn" id="chatBtn">💬</div>
+
+    <!-- CHAT BOX -->
+    <div class="chat-box" id="chatBox">
+        <div class="chat-header">
+            <span>Live Support</span>
+            <span class="chat-close" id="chatClose">✕</span>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-msg msg-bot">Halo! 👋 Ada yang bisa kami bantu?</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Ketik pesan...">
+            <button id="chatSend">Kirim</button>
+        </div>
     </div>
 
-    <!-- Harga Real-time Card -->
-    <div class="price-card">
-      <div class="price-header">
-        <h3>Harga Pasar Langsung</h3>
-        <div class="live-indicator">
-          <div class="live-dot"></div>
-          LIVE
-        </div>
-      </div>
-
-      <div class="price-item">
-        <div>
-          <div class="pair-name">EUR/USD</div>
-        </div>
-        <div>
-          <div class="pair-price">1.08642</div>
-          <div class="pair-change change-up">+0.24%</div>
-        </div>
-      </div>
-
-      <div class="price-item">
-        <div>
-          <div class="pair-name">GBP/USD</div>
-        </div>
-        <div>
-          <div class="pair-price">1.27185</div>
-          <div class="pair-change change-up">+0.18%</div>
-        </div>
-      </div>
-
-      <div class="price-item">
-        <div>
-          <div class="pair-name">USD/JPY</div>
-        </div>
-        <div>
-          <div class="pair-price">149.825</div>
-          <div class="pair-change change-down">-0.12%</div>
-        </div>
-      </div>
-
-      <div class="price-item">
-        <div>
-          <div class="pair-name">XAU/USD</div>
-        </div>
-        <div>
-          <div class="pair-price">2039.65</div>
-          <div class="pair-change change-up">+0.32%</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Ticker Harga Berjalan -->
-<div class="ticker-wrap">
-  <div class="ticker">
-    <span>EUR/USD <strong>1.08642 ↑</strong></span>
-    <span>GBP/USD <strong>1.27185 ↑</strong></span>
-    <span>USD/JPY <strong>149.825 ↓</strong></span>
-    <span>XAU/USD <strong>3705.00 ↑</strong></span>
-    <span>BTC/USD <strong>98450.00 ↓</strong></span>
-    <span>&nbsp;&mdash;&nbsp;</span>
-    <span>EUR/USD <strong>1.08642 ↑</strong></span>
-    <span>GBP/USD <strong>1.27185 ↑</strong></span>
-    <span>USD/JPY <strong>149.825 ↓</strong></span>
-    <span>XAU/USD <strong>3705.00 ↑</strong></span>
-    <span>BTC/USD <strong>98450.00 ↓</strong></span>
-    <span>&nbsp;&mdash;&nbsp;</span>
-  </div>
-</div>
-
-
-
-<!-- Fitur Utama -->
-<section class="section">
-  <div class="container">
-    <div class="section-heading">
-      <h2>Kenapa Memulai <span>Bersama Kami?</span></h2>
-      <p>Kami hadir untuk memberikan informasi yang jelas dan dukungan penuh bagi siapa saja yang ingin memasuki dunia trading.</p>
-    </div>
-
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">🔒</div>
-        <h3>Aman & Terpercaya</h3>
-        <p>Semua dana dan transaksi Anda dikelola langsung oleh sistem resmi Exness yang teregulasi.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">📚</div>
-        <h3>Panduan Lengkap</h3>
-        <p>Dari pendaftaran hingga mulai trading. Langkah demi langkah, tidak ada yang membingungkan.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>Eksekusi Cepat</h3>
-        <p>Manfaatkan infrastruktur trading kelas dunia — eksekusi cepat dan spread kompetitif.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">💰</div>
-        <h3>Penarikan Mudah</h3>
-        <p>Penarikan dana melalui berbagai metode pembayaran. Cepat dan transparan.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">📈</div>
-        <h3>Beragam Instrumen</h3>
-        <p>Forex, Emas, Kripto, Saham, dan Indeks — semua tersedia dalam satu akun trading.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">🤝</div>
-        <h3>Dukungan Penuh</h3>
-        <p>Ada yang ditanyakan? Hubungi kami kapan saja. Siap membantu dari awal hingga Anda nyaman.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Statistik -->
-<section class="section" style="background: rgba(0, 212, 255, 0.02);">
-  <div class="container">
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-number">100+</div>
-        <div class="stat-label">Instrumen Trading</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">24/7</div>
-        <div class="stat-label">Dukungan Info</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">Cepat</div>
-        <div class="stat-label">Proses Pendaftaran</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">Resmi</div>
-        <div class="stat-label">Mitra Exness</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA Section -->
-<section class="section">
-  <div class="container">
-    <div class="cta-section">
-      <h2>Siap Memulai Perjalanan Trading Anda?</h2>
-      <p>Buka akun dalam hitungan menit. Mulai dengan akun Demo untuk berlatih tanpa risiko, atau langsung akun Real.</p>
-      <a href="https://www.exness.com/signup/?ref=GANTI-REF-KAMU" target="_blank" class="btn-primary">👉 Daftar di Exness Sekarang</a>
-    </div>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <h3>EXNESS MITRA</h3>
-        <p>Portal informasi dan mitra resmi Exness. Membantu Anda memulai trading dengan benar dan terarah.</p>
-      </div>
-
-      <div class="footer-links">
-        <h4>Navigasi</h4>
-        <ul>
-          <li><a href="index.html">Beranda</a></li>
-          <li><a href="tentang.html">Tentang Kami</a></li>
-          <li><a href="keuntungan.html">Keuntungan</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-links">
-        <h4>Informasi</h4>
-        <ul>
-          <li><a href="caradaftar.html">Cara Daftar</a></li>
-          <li><a href="kontak.html">Hubungi Kami</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-links">
-        <h4>Link Resmi</h4>
-        <ul>
-          <li><a href="https://www.exness.com" target="_blank">Exness.com</a></li>
-          <li><a href="https://help.exness.com" target="_blank">Pusat Bantuan</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p>&copy; 2026 Exness Mitra. Semua Hak Dilindungi.</p>
-      <p class="disclaimer-text">
-        ⚠️ Penyangkalan: Ini adalah situs mitra independen (Introducing Broker) dan BUKAN situs resmi Exness. Semua pendaftaran, transaksi, dan penyimpanan dana dilakukan sepenuhnya di situs resmi Exness. Trading melibatkan risiko kehilangan modal. Pastikan Anda memahami risiko yang terlibat.
-      </p>
-    </div>
-  </div>
-</footer>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
