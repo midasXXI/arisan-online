@@ -1,5 +1,5 @@
 // ===== GANTI API KEY KAMU DI BAWAH INI =====
-const API_KEY_EXNESS = "exnsk-9161ab243e6a8d9a68e18f653425090899140ce2e1be4e155cdcf143eba8b56a";
+const API_KEY_EXNESS = "";
 
 // ===== AMBIL HARGA LANGSUNG DARI EXNESS =====
 async function ambilHargaExness() {
