@@ -1,7 +1,7 @@
 // ==========================================
 // ISI API KEY KAMU DI BAWAH INI
 // ==========================================
-const API_KEY = "ISI_API_KEY_KAMU_DISINI";
+const API_KEY = "exnsk-9161ab243e6a8d9a68e18f653425090899140ce2e1be4e155cdcf143eba8b56a";
 
 let prices = [];
 
